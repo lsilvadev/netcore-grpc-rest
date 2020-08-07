@@ -1,10 +1,11 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 
 namespace netcore_grpc_rest
 {
@@ -21,6 +22,15 @@ namespace netcore_grpc_rest
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureKestrel(options =>
+                    {
+                        options.ListenAnyIP(5001, o => o.Protocols =
+                            HttpProtocols.Http1);
+
+                        options.ListenAnyIP(5002, o => o.Protocols =
+                            HttpProtocols.Http2);
+                    });
+
                     webBuilder.UseStartup<Startup>();
                 });
     }
