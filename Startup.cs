@@ -16,6 +16,7 @@ namespace netcore_grpc_rest
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             services.AddGrpc();
         }
 
@@ -29,8 +30,12 @@ namespace netcore_grpc_rest
 
             app.UseRouting();
 
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
+
                 endpoints.MapGrpcService<GreeterService>();
 
                 endpoints.MapGet("/", async context =>
